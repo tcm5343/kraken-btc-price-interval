@@ -11,7 +11,7 @@ logging.basicConfig(
     level=logging.INFO,
 )
 log = logging.getLogger(__name__)
-wallet_name = 'test_wallet'
+wallet_name = 'lightning_ledger_dev_wallet'
 
 
 def __call_bitcoin_core(method: str, args: list):
@@ -30,20 +30,19 @@ def __call_bitcoin_core(method: str, args: list):
 
 
 def create_btc_core_wallet():
-    create_wallet_resp = __call_bitcoin_core('createwallet', ['lightning_ledger_dev_wallet'])
+    create_wallet_resp = __call_bitcoin_core('createwallet', [wallet_name])
     if create_wallet_resp.get('error'):
         if create_wallet_resp['error']['code'] == -4:
-            log.info('wallet already exists')
+            log.info(f'{wallet_name} already exists')
         else:
-            raise Exception(f'Error creating wallet: {create_wallet_resp}')
+            raise Exception(f'Error creating {wallet_name}: {create_wallet_resp}')
     else:
-        log.info('new wallet created')
+        log.info(f'{wallet_name} created')
 
 
-# crete wallet
 create_btc_core_wallet()
-# generate an address
-# mine 100 blocks and send to the generated address
-
-# set up alice wallet, load with funds, peer w/ bob, open channel
+address = __call_bitcoin_core('getnewaddress', [])['result']
+log.info(address)
+mine_resp = __call_bitcoin_core('generatetoaddress', [101, address])
+log.info(mine_resp)
 
