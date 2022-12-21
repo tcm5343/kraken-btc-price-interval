@@ -1,18 +1,11 @@
 import os
 import sqlite3
-from datetime import datetime
 
 import pandas as pd
 
-from objects.db_connection import DBConnection
-# db = DBConnection(db_name=os.path.join(os.getcwd(), 'data', 'app_data'))
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
 KRAKEN_COMPUTED_INTERVALS = sorted([1, 5, 15, 60, 720, 1440])
-
-pd.set_option('display.max_colwidth', None)
-conn = sqlite3.connect(os.path.join(DATA_DIR, 'app.db'))
-cursor = conn.cursor()
 
 
 def load_historical_kraken_exports():
@@ -88,18 +81,12 @@ def calc_spot_price_by_minute(num_minutes: int = 1440) -> pd.DataFrame:
     return result_df
 
 
-# load_historical_kraken_exports()
+pd.set_option('display.max_colwidth', None)
+conn = sqlite3.connect(os.path.join(DATA_DIR, 'app.db'))
+cursor = conn.cursor()
+
+load_historical_kraken_exports()
 df_720 = calc_spot_price_by_minute(721)
-print(df_720.head(5))
-
-# TODO:
-#  1. historical data has been loaded, use the API to get the missing data.
-#  2. determine if hitting the API only for the second interval and then aggregating is faster than hitting for them all
-#  3. write a python script to download the hisotrical zip extracts automatically and load them
-#  4. create a table to store metadata on latest time which has been loaded, if a new quarter has passed,
-#  potentially download the extracts instead of hitting api for such a long time peroid
-
-# it will take ~2 seconds to load a single day at a 1 minute interval
 
 conn.commit()
 conn.close()

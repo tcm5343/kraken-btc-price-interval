@@ -1,0 +1,8 @@
+# TODO:
+#  1. historical data has been loaded, use the API to get the missing data.
+#  2. determine if hitting the API only for the second interval and then aggregating is faster than hitting for them all
+#  3. write a python script to download the hisotrical zip extracts automatically and load them
+#  4. create a table to store metadata on latest time which has been loaded, if a new quarter has passed,
+#  potentially download the extracts instead of hitting api for such a long time peroid
+
+# it will take ~2 seconds to load a single day at a 1 minute interval
