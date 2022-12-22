@@ -6,3 +6,10 @@
 #  potentially download the extracts instead of hitting api for such a long time peroid
 
 # it will take ~2 seconds to load a single day at a 1 minute interval
+
+
+# A strategy for keeping data up to date for each run:
+# Only update data by minute intervals. When data is requested for a specific interval, check if the table
+# exists. If it doesn't exist, compute it. If it exists, then we query it, and then query and compute kraken_price_1
+# (optimize this query by determining the highest time in the table which exists for that specific interval) to resolve
+# any missing data. Join the two frames to have the most up to date data.
