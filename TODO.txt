@@ -13,3 +13,5 @@
 # exists. If it doesn't exist, compute it. If it exists, then we query it, and then query and compute kraken_price_1
 # (optimize this query by determining the highest time in the table which exists for that specific interval) to resolve
 # any missing data. Join the two frames to have the most up to date data.
+
+# add some logs for performance testing
