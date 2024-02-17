@@ -1,9 +1,4 @@
-# lightning-ledger
-Required software: <br>
-[Python 3.10](https://www.python.org/downloads/) <br>
-[Bitcoin Core](https://bitcoin.org/en/bitcoin-core/) <br>
-[LND](https://github.com/lightningnetwork/lnd) <br>
+# kraken-btc-price-interval
 
-
-Project Structure: <br>
-`dev/` - Contains scripts to set up a local development environment. Set your `bitcoin.conf` to regtest.
+Download the historical OHLCVT data from Kraken https://support.kraken.com/hc/en-us/articles/360047124832-Downloadable-historical-OHLCVT-Open-High-Low-Close-Volume-Trades-data.
+Extract it under `./data/`.
