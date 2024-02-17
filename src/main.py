@@ -7,13 +7,14 @@ import pandas as pd
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'data')
 KRAKEN_COMPUTED_INTERVALS = sorted([1, 5, 15, 60, 720, 1440])
+INTERVAL = 1
 
 
 def load_historical_kraken_exports():
     for interval in KRAKEN_COMPUTED_INTERVALS:
         print(f'creating kraken_price_{interval} table')
         df = pd.read_csv(
-            os.path.join(DATA_DIR, 'import', f'XBTUSD_{interval}.csv'),
+            os.path.join(DATA_DIR, 'Kraken_OHLCVT', f'XBTUSD_{interval}.csv'),
             sep=',',
             names=['time', 'open', 'high', 'low', 'close', 'volume', 'trades'],
             index_col=['time'],
@@ -64,7 +65,7 @@ def __determine_optimal_source_interval(desired_interval: int) -> int:
 def __resolve_source_df(interval_by_min: int) -> pd.DataFrame:
     source_interval = __determine_optimal_source_interval(interval_by_min)
     table_name = f'kraken_price_{source_interval}'
-    print(f'Most optimal table to query: {table_name}')
+    print(f'Most optimal table to query for interval: {table_name}')
     source_df = pd.read_sql(f'select * from {table_name};', con=conn)
     return source_df
 
@@ -122,13 +123,14 @@ def calc_spot_price_by_minute(interval_by_min: int = 1440) -> pd.DataFrame:
     return result_df
 
 
-pd.set_option('display.max_colwidth', None)
-conn = sqlite3.connect(os.path.join(DATA_DIR, 'app.db'))
-cursor = conn.cursor()
+if __name__ == '__main__':
+    pd.set_option('display.max_colwidth', None)
+    conn = sqlite3.connect(os.path.join(DATA_DIR, 'app.db'))
+    cursor = conn.cursor()
 
-# load_historical_kraken_exports()
-df_720 = calc_spot_price_by_minute(2)
-print(df_720.head(5))
+    load_historical_kraken_exports()
+    df = calc_spot_price_by_minute(INTERVAL)
+    print(df.head(5))
 
-conn.commit()
-conn.close()
+    conn.commit()
+    conn.close()
